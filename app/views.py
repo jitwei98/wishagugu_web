@@ -60,26 +60,28 @@ class GiftDetail(DetailView):
         return context
 
 
+GIFT_SUGGESTIONS_STUB = [
+    {
+        'name': 'Exploding Kittens',
+        'amount': 15.99
+    },
+    {
+        'name': 'Wyze Cam',
+        'amount': 25.98
+    },
+    {
+        'name': 'Bluetooth Turntable',
+        'amount': 41.99
+    },
+]
+
 class GiftCreate(CreateView):
     model = Gift
     fields = ['event', 'name', 'amount', 'contributors']
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        suggestions = [
-                {
-                    'name': 'Exploding Kittens',
-                    'amount': 15.99
-                },
-                {
-                    'name': 'Wyze Cam',
-                    'amount': 25.98
-                },
-                {
-                    'name': 'Bluetooth Turntable',
-                    'amount': 41.99
-                }
-        ]
+        suggestions = GIFT_SUGGESTIONS_STUB
         context['suggestions'] = suggestions
         return context
 
