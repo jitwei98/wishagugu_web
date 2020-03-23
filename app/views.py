@@ -11,6 +11,9 @@ def test(request):
     return render(request, 'app/test.html', context={})
 
 
+def home(request):
+    return render(request, 'app/home.html')
+
 class EventList(ListView):
     model = Event
 
