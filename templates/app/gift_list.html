@@ -1,0 +1,10 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+    <h2>Gifts for </h2>
+    <ul>
+        {% for gift in object_list %}
+            <li>{{ gift.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

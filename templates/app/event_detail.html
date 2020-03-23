@@ -1,0 +1,38 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+    <h1>{{ object.name }}</h1>
+    Participants:
+    <ul>
+    {% for participant in object.participants.all %}
+        {% if request.user.id == participant.pk %}
+        <li>User id: {{ participant.pk }}
+            <a href="{% url 'withdraw' object.pk %}"><button>Withdraw</button></a>
+        </li>
+        {% else %}
+        <li>User id: {{ participant.pk }}</li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+
+
+    {% if not user.is_authenticated %}
+        <p>Sign in to participate in events</p>
+    {% elif not is_participant %}
+        <a href="{% url 'participate' object.pk %}"><button>Participate</button></a><br><br>
+    {% endif %}
+
+    Gifts:
+    <ul>
+    {% for gift in object.gift_set.all %}
+        <li>
+            <a href="{% url 'gift-detail' object.pk gift.pk %}">{{ gift.name }}</a>
+{#            {% if  %}TODO: if user is part of the contributors then show badge#}
+        </li>
+    {% endfor %}
+    </ul>
+
+    <a href="{% url 'gift-create' object.pk %}"><button>Suggest a gift</button></a>
+
+
+{% endblock %}

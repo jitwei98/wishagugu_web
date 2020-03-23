@@ -1,0 +1,29 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+    <h2>{{ object.name }}</h2>
+
+    <a href="{% url 'gift-update' object.event.pk object.pk %}"><button>Update</button></a>
+    <a href="{% url 'gift-delete' object.event.pk object.pk %}"><button>Delete</button></a>
+
+    <h4>Amount: {{ object.amount }}</h4>
+
+    Contributors: {{ object.contributors.count }}
+    <ul>
+    {% for contributor in object.contributors.all %}
+        {% if request.user.id == contributor.pk %}
+        <li>User id: {{ contributor }}
+            <a href="{% url 'count-me-out' object.pk %}"><button>Count me out</button></a>
+        </li>
+        {% else %}
+        <li>User id: {{ contributor }}</li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+
+    {% if not is_contributor %}
+        <a href="{% url 'count-me-in' object.pk %}"><button>Count me in</button></a>
+    {% endif %}
+
+    <p>Each person spends: {{ price_per_pax }}</p>
+{% endblock %}
