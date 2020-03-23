@@ -64,6 +64,25 @@ class GiftCreate(CreateView):
     model = Gift
     fields = ['event', 'name', 'amount', 'contributors']
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        suggestions = [
+                {
+                    'name': 'Exploding Kittens',
+                    'amount': 15.99
+                },
+                {
+                    'name': 'Wyze Cam',
+                    'amount': 25.98
+                },
+                {
+                    'name': 'Bluetooth Turntable',
+                    'amount': 41.99
+                }
+        ]
+        context['suggestions'] = suggestions
+        return context
+
     def get_initial(self):
         event = get_object_or_404(Event, pk=self.kwargs['event_id'])
         return {

@@ -5,4 +5,33 @@
         {{ form.as_p }}
         <input type="submit" value="Save">
     </form>
+
+    <p>Don't know what to add? Simply pick from our suggested gifts:</p>
+    <ul>
+        {% for gift in suggestions %}
+            <li>
+                {{ gift.name }} - $ {{ gift.amount }}
+                <button class="add-suggested-btn"
+                data-gift-name="{{ gift.name }}"
+                data-gift-amount="{{ gift.amount }}"
+                >Use this</button>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block extra_script %}
+    <script type="text/javascript">
+        var buttons = document.querySelectorAll(".add-suggested-btn");
+        buttons.forEach(function(button) {
+            button.addEventListener("click", function(event) {
+               var nameInput = document.getElementById("id_name");
+               var amountInput = document.getElementById("id_amount");
+
+               nameInput.value = event.target.getAttribute('data-gift-name');
+               amountInput.value = event.target.getAttribute('data-gift-amount');
+            });
+        });
+
+    </script>
 {% endblock %}
