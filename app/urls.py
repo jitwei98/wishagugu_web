@@ -15,10 +15,12 @@ urlpatterns = [
     path('event/<int:event_id>/gift/<int:pk>/update/', views.GiftUpdate.as_view(), name='gift-update'),
     path('event/<int:event_id>/gift/<int:pk>/delete/', views.GiftDelete.as_view(), name='gift-delete'),
 
-    path('withdraw/<int:event_id>', views.withdraw, name='withdraw'),
-    path('participate/<int:event_id>', views.participate, name='participate'),
-    path('count-me-out/<int:gift_id>', views.count_me_out, name='count-me-out'),
-    path('count-me-in/<int:gift_id>', views.count_me_in, name='count-me-in'),
+    path('withdraw/<int:event_id>/', views.withdraw, name='withdraw'),
+    path('participate/<int:event_id>/', views.participate, name='participate'),
+    path('count-me-out/<int:gift_id>/', views.count_me_out, name='count-me-out'),
+    path('count-me-in/<int:gift_id>/', views.count_me_in, name='count-me-in'),
+
+    path('accounts/signup/', views.SignUp.as_view(), name='signup')
 
     # path('', views.test, name='test'),
 ]
