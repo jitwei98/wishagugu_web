@@ -1,15 +1,78 @@
 {% extends 'app/base.html' %}
 
+{% load crispy_forms_tags %}
+
+{% block style %}
+<style type="text/css">
+    .card {
+        margin: auto;
+        width: 80%;
+        padding: 40px;
+        margin-top: 20px;
+    }
+
+    img {
+        width: 100%;
+        object-fit: contain;
+        margin-bottom: 20px;
+    }
+
+</style>
+{% endblock %}
+
 {% block content %}
-    <div>Gift suggestions for {{ recipient.name }}</div>
-    <ol>
-        {% for gift in gifts %}
-            <li>{{ gift.name }} - {{ gift.price }} -
-                <img src="{{ gift.image_url }}">
-                <button type="button">Vote</button>
-            </li>
-        {% endfor %}
-    </ol>
+    <div class="card bg-light text-dark">
+        <h2 class="card-title">Gift Suggestions for {{ recipient.name }}</h2>
+        <a href="#">Invite your friends to vote!</a>
+{#        <ol>#}
+{#            {% for gift in gifts %}#}
+{#                <li>{{ gift.name }} - {{ gift.price }} -#}
+{#                    <img src="{{ gift.image_url }}">#}
+{#                    <button type="button">Vote</button>#}
+{#                </li>#}
+{#            {% endfor %}#}
+{#        </ol>#}
+        <div class="card-body">
+            <form method="post">
+                <div class="container">
+                    <div class="row">
+                        {% for gift in gifts %}
+                            <div class="col-12 col-md-4">
+                                {{ gift.name }} - ${{ gift.price }}
+                                <img src="{{ gift.image_url }}" class="img-responsive">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+    {#            {% csrf_token %}#}
+    {#            {{ form | crispy }}#}
+    {##}
+    {#            <div class="row justify-content-end">#}
+    {#                <div class="col-2">#}
+    {#                    <button type="submit" class="btn btn-primary">Next</button>#}
+    {#                </div>#}
+    {#            </div>#}
+                <form action="" method="post">
+                    {% csrf_token %}
+                  <div class="form-group">
+                    <label for="gift-select">Vote for</label>
+                    <select class="form-control" id="gift-select" name="choice">
+                      {% for gift in gifts %}
+                          <option value="{{ gift.pk }}">{{ gift.name }} - $ {{ gift.price }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+
+            </form>
+        </div>
+    </div>
+
 
 {#    TODO: show links for friends to share #}
 {% endblock %}

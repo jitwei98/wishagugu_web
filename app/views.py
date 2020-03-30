@@ -33,17 +33,26 @@ def recipient_create(request):
 def gift_suggestions(request, id):
     recipient = get_object_or_404(Recipient, pk=id)
 
-    gift_stub = {
-        'name': 'Mango',
-        'price': 60,
-        'image_url': 'https://calories-info.com/site/assets/files/1173/mango.650x0.jpg'
-    }
-    gifts_stub = [gift_stub] * 3
+    if request.method == 'POST':
+        choice_id = request.POST.get('choice')
+        suggestion = get_object_or_404(SuggestedGift, pk=choice_id)
+        suggestion.votes = suggestion.votes + 1
+        suggestion.save()
+        # TODO: redirect to the vote result screen
+        return JsonResponse({})
+
+    # gift_stub = {
+    #     'name': 'Mango',
+    #     'price': 60,
+    #     'image_url': 'https://calories-info.com/site/assets/files/1173/mango.650x0.jpg'
+    # }
+    # gifts_stub = [gift_stub] * 3
+    gifts = SuggestedGift.objects.filter(recipient_id=id)[:3]
     # TODO: let user add suggested gifts
 
     context = {
         'recipient': recipient,
-        'gifts': gifts_stub
+        'gifts': gifts
     }
     return render(request, 'app/suggestion_list.html', context=context)
 
