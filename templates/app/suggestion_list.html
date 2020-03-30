@@ -1,0 +1,15 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+    <div>Gift suggestions for {{ recipient.name }}</div>
+    <ol>
+        {% for gift in gifts %}
+            <li>{{ gift.name }} - {{ gift.price }} -
+                <img src="{{ gift.image_url }}">
+                <button type="button">Vote</button>
+            </li>
+        {% endfor %}
+    </ol>
+
+{#    TODO: show links for friends to share #}
+{% endblock %}

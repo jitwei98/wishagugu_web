@@ -6,6 +6,11 @@ from . import views
 urlpatterns = [
     # path('', views.EventList.as_view(), name='event-list'),
     path('', views.home, name='home'),
+    # path('test/', views.user_journey, name='test'),
+    path('recipient/add/', views.recipient_create, name='recipient-create'),
+    path('suggestion/<int:id>/', views.gift_suggestions, name='gift-suggestions'),
+    path('result/<int:id>/', views.voting_result, name='voting-result'),
+
     path('event/', views.EventList.as_view(), name='event-list'),
     path('event/<int:pk>/', views.EventDetail.as_view(), name='event-detail'),
     # path('event/<int:event_id>/gift/', views.gift_list, name='gift-list'),

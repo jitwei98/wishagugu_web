@@ -1,0 +1,51 @@
+{% extends 'app/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block style %}
+<style type="text/css">
+    .card {
+        margin: auto;
+        width: 50%;
+        padding: 40px;
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="card bg-light text-dark">
+        <h2 class="card-title">Add a Recipient</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form | crispy }}
+
+            <div class="row justify-content-end">
+                <div class="col-2">
+                    <button type="submit" class="btn btn-primary">Next</button>
+                </div>
+            </div>
+        </form>
+
+{#        <div class="card-body">#}
+{#            <div class="container">#}
+{#                <div class="row">#}
+{#                    <div class="col-6 offset-3">#}
+{#                        <form method="post">#}
+{#                            {% csrf_token %}#}
+{#                            {{ form | crispy }}#}
+{##}
+{#                            <div class="row justify-content-end">#}
+{#                                <div class="col-2">#}
+{#                                    <button type="submit" class="btn btn-primary">Next</button>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
+{% endblock %}

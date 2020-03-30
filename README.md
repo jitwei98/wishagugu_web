@@ -16,3 +16,11 @@ python manage.py runserver
 python manage.py createsuperuser
 ```
 login at `localhost:8000/admin`
+
+
+
+
+## Deployment
+```
+heroku config:set WEB_CONCURRENCY=3
+```

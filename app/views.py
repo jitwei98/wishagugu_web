@@ -1,19 +1,64 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from .models import Event, Gift
+from .forms import RecipientModelForm
+from .models import Event, Gift, Recipient, SuggestedGift
 
 
 def test(request):
     return render(request, 'app/test.html', context={})
 
-
 def home(request):
     return render(request, 'app/home.html')
+
+def recipient_create(request):
+    if request.method == 'POST':
+        form = RecipientModelForm(request.POST)
+        if form.is_valid():
+            new_recipient = form.save()
+            url = reverse('gift-suggestions', kwargs={'id': new_recipient.pk})
+            return HttpResponseRedirect(url)
+    else:
+        form = RecipientModelForm()
+    context = {
+        'form': form
+    }
+    return render(request, 'app/recipient_form.html', context=context)
+
+def gift_suggestions(request, id):
+    recipient = get_object_or_404(Recipient, pk=id)
+
+    gift_stub = {
+        'name': 'Mango',
+        'price': 60,
+        'image_url': 'https://calories-info.com/site/assets/files/1173/mango.650x0.jpg'
+    }
+    gifts_stub = [gift_stub] * 3
+    # TODO: let user add suggested gifts
+
+    context = {
+        'recipient': recipient,
+        'gifts': gifts_stub
+    }
+    return render(request, 'app/suggestion_list.html', context=context)
+
+# def increase_vote(request, id):
+#     return
+
+def voting_result(request, id):
+    recipient = get_object_or_404(Recipient, pk=id)
+    gifts = SuggestedGift.objects.filter(recipient_id=id)
+
+    context = {
+        'recipient': recipient,
+        'gifts': gifts
+    }
+    return render(request, 'app/voting_result.html', context=context)
 
 class EventList(ListView):
     model = Event

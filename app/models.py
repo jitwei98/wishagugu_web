@@ -39,3 +39,19 @@ class Gift(models.Model):
 
     def is_contributor(self, user_id):
         return self.contributors.filter(id=user_id).exists()
+
+
+class Recipient(models.Model):
+    name = models.CharField(max_length=255)
+    relationship = models.CharField(max_length=255)
+    interests = models.CharField(max_length=255, blank=True)
+    gifting_context = models.CharField(max_length=255, blank=True)
+    budget = models.DecimalField(decimal_places=2, max_digits=10)
+
+
+class SuggestedGift(models.Model):
+    name = models.CharField(max_length=255)
+    price = models.DecimalField(decimal_places=2, max_digits=10)
+    image_url = models.URLField(blank=True)
+    recipient = models.ForeignKey(Recipient, on_delete=models.CASCADE)
+    votes = models.IntegerField(default=0)
