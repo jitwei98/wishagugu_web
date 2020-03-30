@@ -7,7 +7,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .forms import RecipientModelForm
-from .models import Event, Gift, Recipient, SuggestedGift
+from .models import Event, Gift, Recipient, SuggestedGift, Permalink
 
 
 def test(request):
@@ -47,12 +47,22 @@ def gift_suggestions(request, id):
     #     'image_url': 'https://calories-info.com/site/assets/files/1173/mango.650x0.jpg'
     # }
     # gifts_stub = [gift_stub] * 3
-    gifts = SuggestedGift.objects.filter(recipient_id=id)[:3]
     # TODO: let user add suggested gifts
+    gifts = SuggestedGift.objects.filter(recipient_id=id)[:3]
+
+    try:
+        permalink = Permalink.objects.get(refers_to_id=id)
+    except Permalink.DoesNotExist:
+        pk = Permalink.generate_permalink_pk(recipient)
+        permalink = Permalink(refers_to=recipient, key=pk)
+        permalink.save()
+    share_url = request.build_absolute_uri(reverse('permalink', args=[permalink.key]))
+    print(share_url)
 
     context = {
         'recipient': recipient,
-        'gifts': gifts
+        'gifts': gifts,
+        'share_url': share_url
     }
     return render(request, 'app/suggestion_list.html', context=context)
 
@@ -195,3 +205,10 @@ class SignUp(CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
+
+
+def redirect_permalink(request, permalink):
+    permalink_obj = get_object_or_404(Permalink, key=permalink)
+    recipient_id = permalink_obj.refers_to_id
+    url = reverse('gift-suggestions', args=[recipient_id])
+    return redirect(url)

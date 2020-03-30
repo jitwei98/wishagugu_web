@@ -55,3 +55,17 @@ class SuggestedGift(models.Model):
     image_url = models.URLField(blank=True)
     recipient = models.ForeignKey(Recipient, on_delete=models.CASCADE)
     votes = models.IntegerField(default=0)
+
+
+
+class Permalink(models.Model):
+    PERMALINK_LENGTH = 8
+
+    key = models.CharField(primary_key=True, max_length=PERMALINK_LENGTH)
+    refers_to = models.OneToOneField(Recipient, on_delete=models.CASCADE)
+
+    @staticmethod
+    def generate_permalink_pk(recipient):
+        import hashlib
+        result = hashlib.md5(str(recipient).encode())
+        return result.hexdigest()[:Permalink.PERMALINK_LENGTH]

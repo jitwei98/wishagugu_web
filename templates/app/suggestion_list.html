@@ -23,7 +23,6 @@
 {% block content %}
     <div class="card bg-light text-dark">
         <h2 class="card-title">Gift Suggestions for {{ recipient.name }}</h2>
-        <a href="#">Invite your friends to vote!</a>
 {#        <ol>#}
 {#            {% for gift in gifts %}#}
 {#                <li>{{ gift.name }} - {{ gift.price }} -#}
@@ -32,8 +31,16 @@
 {#                </li>#}
 {#            {% endfor %}#}
 {#        </ol>#}
+        <div class="card-subtitle">
+{#            <label for="share-url-input">Invite your friends</label>#}
+            <div class="form-row">
+                <input type="text" value="{{ share_url }}" id="share-url-input">
+                <button type="button" id="copyTextBtn" class="btn btn-primary" onclick="copyText()">Copy Link</button>
+            </div>
+        </div>
+
         <div class="card-body">
-            <form method="post">
+{#            <form method="post">#}
                 <div class="container">
                     <div class="row">
                         {% for gift in gifts %}
@@ -69,10 +76,29 @@
                     </div>
                 </form>
 
-            </form>
+{#            </form>#}
         </div>
     </div>
+{% endblock %}
 
+{% block extra_script %}
+    <script type="text/javascript">
+        function copyText() {
+          /* Get the text field */
+          var copyText = document.getElementById("share-url-input");
 
-{#    TODO: show links for friends to share #}
+          /* Select the text field */
+          copyText.select();
+          copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+          /* Copy the text inside the text field */
+          document.execCommand("copy");
+
+          document.getElementById('copyTextBtn').textContent = 'Link Copied!';
+
+          setTimeout(() => {
+              document.getElementById('copyTextBtn').textContent = 'Copy Link';
+          }, 1000);
+        }
+    </script>
 {% endblock %}
