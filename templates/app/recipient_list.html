@@ -1,0 +1,31 @@
+{% extends 'app/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block style %}
+<style type="text/css">
+    .card {
+        margin: auto;
+        width: 50%;
+        padding: 40px;
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="card bg-light text-dark">
+        <h2 class="card-title">
+            Recipient List
+            <a href="{% url 'recipient-create' %}"><button type="button" class="btn btn-primary">Add recipient</button></a>
+        </h2>
+
+        <div class="container">
+            <ol>
+                {% for recipient in object_list %}
+                    <li><a href="{% url 'gift-suggestions' recipient.pk %}">{{ recipient.name }}</a></li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+{% endblock %}

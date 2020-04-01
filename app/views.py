@@ -30,6 +30,9 @@ def recipient_create(request):
     }
     return render(request, 'app/recipient_form.html', context=context)
 
+class RecipientList(ListView):
+    model = Recipient
+
 def gift_suggestions(request, id):
     recipient = get_object_or_404(Recipient, pk=id)
 
