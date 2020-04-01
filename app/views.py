@@ -71,7 +71,9 @@ def gift_suggestions(request, id):
         suggestion.votes = suggestion.votes + 1
         suggestion.save()
         # TODO: redirect to the vote result screen
-        return JsonResponse({})
+
+        url = reverse('voting-result', kwargs={'id': recipient.pk})
+        return HttpResponseRedirect(url)
 
     # gift_stub = {
     #     'name': 'Mango',
