@@ -22,5 +22,8 @@ login at `localhost:8000/admin`
 
 ## Deployment
 ```
+git push heroku master
+heroku run python manage.py migrate
+
 heroku config:set WEB_CONCURRENCY=3
 ```
