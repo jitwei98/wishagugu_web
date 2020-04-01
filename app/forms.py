@@ -13,5 +13,5 @@ class RecipientInformationForm(forms.Form):
 class RecipientModelForm(forms.ModelForm):
     class Meta:
         model = Recipient
-        exclude = []
+        exclude = ['gift_has_been_bought']
 

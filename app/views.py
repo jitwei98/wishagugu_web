@@ -16,11 +16,40 @@ def test(request):
 def home(request):
     return render(request, 'app/home.html')
 
+# ML stub for generating gift-suggestions
+def generate_gift_suggestions(recipient_id):
+    gifts = SuggestedGift.objects.all()
+    pk_list = [g.pk for g in gifts]
+
+    import random
+    from datetime import datetime
+    random.seed(datetime.now())
+
+    filtered_pk_list = []
+    for i in range(3):
+        num = random.randint(0, len(pk_list)-1)
+        filtered_pk_list.append(pk_list[num])
+
+    # duplicate and save gifts
+    gifts = gifts.filter(pk__in=filtered_pk_list)
+    for gift in gifts:
+        gift.pk = None
+        gift.recipient_id = recipient_id
+        gift.save()
+
+    return gifts
+
+
 def recipient_create(request):
     if request.method == 'POST':
         form = RecipientModelForm(request.POST)
         if form.is_valid():
             new_recipient = form.save()
+
+            # ML stub for generating gift-suggestions
+            generate_gift_suggestions(new_recipient.pk)
+
+
             url = reverse('gift-suggestions', kwargs={'id': new_recipient.pk})
             return HttpResponseRedirect(url)
     else:
@@ -60,7 +89,6 @@ def gift_suggestions(request, id):
         permalink = Permalink(refers_to=recipient, key=pk)
         permalink.save()
     share_url = request.build_absolute_uri(reverse('permalink', args=[permalink.key]))
-    print(share_url)
 
     context = {
         'recipient': recipient,
