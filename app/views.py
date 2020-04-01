@@ -14,7 +14,9 @@ def test(request):
     return render(request, 'app/test.html', context={})
 
 def home(request):
-    return render(request, 'app/home.html')
+    url = reverse('recipient-list')
+    return HttpResponseRedirect(url)
+    # return render(request, 'app/home.html')
 
 # ML stub for generating gift-suggestions
 def generate_gift_suggestions(recipient_id):
