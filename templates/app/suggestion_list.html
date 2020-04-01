@@ -32,7 +32,6 @@
 {#            {% endfor %}#}
 {#        </ol>#}
         <div class="card-subtitle">
-{#            <label for="share-url-input">Invite your friends</label>#}
             <div class="form-row">
                 <input type="text" value="{{ share_url }}" id="share-url-input">
                 <button type="button" id="copyTextBtn" class="btn btn-primary" onclick="copyText()">Copy Link</button>
@@ -40,7 +39,6 @@
         </div>
 
         <div class="card-body">
-{#            <form method="post">#}
                 <div class="container">
                     <div class="row">
                         {% for gift in gifts %}
@@ -51,14 +49,6 @@
                         {% endfor %}
                     </div>
                 </div>
-    {#            {% csrf_token %}#}
-    {#            {{ form | crispy }}#}
-    {##}
-    {#            <div class="row justify-content-end">#}
-    {#                <div class="col-2">#}
-    {#                    <button type="submit" class="btn btn-primary">Next</button>#}
-    {#                </div>#}
-    {#            </div>#}
                 <form action="" method="post">
                     {% csrf_token %}
                   <div class="form-group">
@@ -76,7 +66,6 @@
                     </div>
                 </form>
 
-{#            </form>#}
         </div>
     </div>
 {% endblock %}

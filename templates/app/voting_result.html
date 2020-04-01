@@ -1,15 +1,72 @@
 {% extends 'app/base.html' %}
 
+{% block style %}
+    <style type="text/css">
+        .card {
+            margin: auto;
+            width: 80%;
+            padding: 40px;
+            margin-top: 20px;
+        }
+
+        img {
+            width: 100%;
+            object-fit: contain;
+            margin-bottom: 20px;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
-    <div>Voting result for {{ recipient.name }}</div>
-    <ol>
-        {% for gift in gifts %}
-            <li>{{ gift.name }} - {{ gift.price }} -
-                <img src="{{ gift.image_url }}">
-                <strong>{{ gift.votes }}</strong>
-            </li>
-        {% endfor %}
-    </ol>
+    <div class="card bg-light text-dark">
+        <h2 class="card-title">Selected gift for {{ recipient.name }}</h2>
+
+        <div class="card-body">
+            <div class="container">
+                <div class="row justify-content-center">
+                    {% for gift in gifts %}
+                        {% if forloop.first %}
+                        <div class="col-12 col-md-4 bg-primary text-light">
+                        {% else %}
+                        <div class="col-12 col-md-4">
+                        {% endif %}
+                            {{ gift.name }} - ${{ gift.price }}
+                            <br>
+                            Votes: {{ gift.votes }}
+                            <img src="{{ gift.image_url }}" class="img-responsive">
+                        </div>
+                    {% endfor %}
+                </div><br>
+                <div class="row">
+                    <div class="col-12">
+                        Price per pax: ${{ gifts.0.price }} / {{ number_of_contributors }} = ${{ price_per_pax }}
+                    </div>
+                </div>
+
+
+                {% if recipient.gift_has_been_bought %}
+                    <div class="row">
+                            <div class="col-12">
+{#                                {% if bought by you,  %}#}
+                                <a href="#">Request payment</a>
+{#                                    {% else %}#}
+{#                                pay the one who bought#}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row justify-content-end">
+                        <div class="col-12 col-md-2">
+{#                            TODO: Implement logic below #}
+                            <a href="#"><button type="button" class="btn btn-primary">Buy Now</button></a>
+{#                            <small class="text-muted">The gift will be marked as "bought" once someone bought it from the link above</small>#}
+                        </div>
+                    </div>
+                {% endif %}
+        </div>
+    </div>
+
+
 
 {#    TODO: request using paylah, show how much each person needs to pay #}
 {% endblock %}

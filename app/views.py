@@ -69,13 +69,22 @@ def gift_suggestions(request, id):
 # def increase_vote(request, id):
 #     return
 
-def voting_result(request, id):
+def voting_result(request: object, id: object) -> object:
     recipient = get_object_or_404(Recipient, pk=id)
-    gifts = SuggestedGift.objects.filter(recipient_id=id)
+    gifts = SuggestedGift.objects\
+                .filter(recipient_id=id)\
+                .order_by('-votes')[:3]
+    # TODO: Tie breaker if same number of votes
+
+    # TODO: Refactor to models.py
+    number_of_contributors = recipient.suggestedgift_set.count()
+    price_per_pax = round(gifts[0].price / number_of_contributors, 2)
 
     context = {
         'recipient': recipient,
-        'gifts': gifts
+        'gifts': gifts,
+        'number_of_contributors': number_of_contributors,
+        'price_per_pax': price_per_pax
     }
     return render(request, 'app/voting_result.html', context=context)
 
