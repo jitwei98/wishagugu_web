@@ -58,7 +58,11 @@
                     <div class="row justify-content-end">
                         <div class="col-12 col-md-2">
 {#                            TODO: Implement logic below #}
-                            <a href="#"><button type="button" class="btn btn-primary">Buy Now</button></a>
+                            {% if gifts.0.url %}
+                                <a href="{{ gifts.0.url }}" class="btn btn-primary" role="button" aria-disabled="true">Buy Now</a>
+                            {% else %}
+                                <a href="#" class="btn btn-secondary" role="button" aria-disabled="true">Buy Now</a>
+                            {% endif %}
 {#                            <small class="text-muted">The gift will be marked as "bought" once someone bought it from the link above</small>#}
                         </div>
                     </div>

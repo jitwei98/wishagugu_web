@@ -54,6 +54,7 @@ class SuggestedGift(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(decimal_places=2, max_digits=10)
     image_url = models.URLField(blank=True)
+    url = models.URLField(blank=True)
     recipient = models.ForeignKey(Recipient, on_delete=models.CASCADE)
     votes = models.IntegerField(default=0)
 
