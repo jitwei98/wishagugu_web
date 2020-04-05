@@ -36,6 +36,7 @@ def generate_gift_suggestions(recipient_id):
         filtered_pk_list.append(pk_list[num])
 
     # duplicate and save gifts
+    # TODO: Make sure there's no duplicated gifts (same item diff pk)
     gifts = gifts.filter(pk__in=filtered_pk_list)
     for gift in gifts:
         gift.pk = None
