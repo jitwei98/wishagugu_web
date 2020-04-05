@@ -20,7 +20,10 @@ def home(request):
 
 # ML stub for generating gift-suggestions
 def generate_gift_suggestions(recipient_id):
-    gifts = SuggestedGift.objects.all()
+    recipient = Recipient.objects.get(pk=recipient_id)
+    budget = recipient.budget
+
+    gifts = SuggestedGift.objects.filter(price__lte=budget)
     pk_list = [g.pk for g in gifts]
 
     import random
