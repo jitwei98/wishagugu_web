@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
     # path('', views.EventList.as_view(), name='event-list'),
     path('', views.home, name='home'),
-    # path('test/', views.user_journey, name='test'),
+    # path('test/', views.test, name='test'),
 
     path('permalink/<str:permalink>/', views.redirect_permalink, name='permalink'),
     path('recipient/', views.RecipientList.as_view(), name='recipient-list'),

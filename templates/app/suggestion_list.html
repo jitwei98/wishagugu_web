@@ -44,11 +44,12 @@
                         {% for gift in gifts %}
                             <div class="col-12 col-md-4">
                                 {{ gift.name }} - ${{ gift.price }}
-                                <img src="{{ gift.image_url }}" class="img-responsive">
+{#                                <img src="{{ gift.image_url }}" class="img-responsive">#}
                             </div>
                         {% endfor %}
                     </div>
                 </div>
+                <br>
                 <form action="" method="post">
                     {% csrf_token %}
                   <div class="form-group">

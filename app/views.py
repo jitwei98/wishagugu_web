@@ -1,3 +1,4 @@
+import pandas as pd
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -22,28 +23,26 @@ def home(request):
 def generate_gift_suggestions(recipient_id):
     recipient = Recipient.objects.get(pk=recipient_id)
     budget = recipient.budget
+    interests = '|'.join(recipient.interests.split(', '))
 
-    gifts = SuggestedGift.objects.filter(price__lte=budget)
-    pk_list = [g.pk for g in gifts]
+    df = pd.read_csv('./data.csv')
+    df.dropna(subset=['Category', 'List Price'], inplace=True)
+    df = df[df['Category'].str.lower().str.contains(interests)]
+    df = df[df['List Price'] <= budget]
+    df = df.sort_values(['List Price'], ascending=False)[:5]
+    df.columns = df.columns.str.replace(r'\s+', '_')
 
-    import random
-    from datetime import datetime
-    random.seed(datetime.now())
-
-    filtered_pk_list = []
-    for i in range(3):
-        num = random.randint(0, len(pk_list)-1)
-        filtered_pk_list.append(pk_list[num])
-
-    # duplicate and save gifts
-    # TODO: Make sure there's no duplicated gifts (same item diff pk)
-    gifts = gifts.filter(pk__in=filtered_pk_list)
-    for gift in gifts:
-        gift.pk = None
-        gift.recipient_id = recipient_id
+    gifts_ids = []
+    for row in df.itertuples():
+        gift = SuggestedGift(
+            recipient_id=recipient_id,
+            name=row.Product_Name,
+            price=row.List_Price
+        )
         gift.save()
+        gifts_ids.append(gift.pk)
 
-    return gifts
+    return SuggestedGift.objects.filter(pk__in=gifts_ids)
 
 
 def recipient_create(request):
