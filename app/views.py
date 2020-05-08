@@ -1,6 +1,6 @@
 import pandas as pd
 from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 
 # Create your views here.
@@ -23,13 +23,16 @@ def home(request):
 def generate_gift_suggestions(recipient_id):
     recipient = Recipient.objects.get(pk=recipient_id)
     budget = recipient.budget
-    interests = '|'.join(recipient.interests.split(', '))
+    interests = recipient.interests
 
-    df = pd.read_csv('./data.csv')
-    df.dropna(subset=['Category', 'List Price'], inplace=True)
-    df = df[df['Category'].str.lower().str.contains(interests)]
+    raw_df = pd.read_csv('./data.csv')
+    raw_df.dropna(subset=['Category', 'List Price'], inplace=True)
+    df = raw_df[raw_df['Category'].str.contains(interests)]
     df = df[df['List Price'] <= budget]
-    df = df.sort_values(['List Price'], ascending=False)[:5]
+    if len(df) < 2:
+        df = raw_df[raw_df['List Price'] <= budget]
+
+    df = df.sort_values(['List Price'], ascending=False)[:3]
     df.columns = df.columns.str.replace(r'\s+', '_')
 
     gifts_ids = []
